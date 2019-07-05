@@ -1,11 +1,26 @@
 <template>
-  <div id="container"></div>
+  <el-row>
+    <el-col :span="16">
+      <div id="container"></div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      center: {
+        latitude: 0,
+        longitude: 0
+      }
+    };
+  },
+  props: {
+    data: {
+      Type: Object,
+      default: {}
+    }
   },
 
   components: {},
@@ -13,10 +28,13 @@ export default {
   computed: {},
 
   mounted() {
+    this.center = this.data;
+
+    console.log(this.center, 123);
     window.onLoad = function() {
       var map = new AMap.Map("container", {
         resizeEnable: true,
-        center: [116.397428, 39.90923],
+        center: [116.39, 39.9],
         zoom: 13
       });
       // 创建一个 Marker 实例：
@@ -40,8 +58,11 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-#container {
-  height: 500px;
+.el-row {
+  height: 400px;
+  #container {
+    height: 400px;
+  }
 }
 </style>
 	
