@@ -18,8 +18,8 @@
           value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="-"
-          start-placeholde="入住日期"
-          end-placeholde="离店日期"
+          start-placeholder="入住日期"
+          end-placeholder="离店日期"
           @change="onDateChange"
         />
 
@@ -64,7 +64,7 @@
                 adultMemberList:range(1,8),
                 childMemberList:range(0,5),
                 searchFormData: {
-                    cityName:'',
+                    cityName:'南京',
                     city:'',
                     enterTime:'',
                     leftTime:'',
@@ -114,6 +114,9 @@
                 this.onChange(this.searchFormData)
             }
         },
+        mounted () {
+            this.onSubmit()
+        }
     }
 </script>
 <style lang='less'>

@@ -17,7 +17,10 @@
         没你找的，回家睡吧
       </div>
       <div v-else>
-
+        <hotelView v-for="item in hotels.data" :key="item.id" :dataSource="item"/>
+        <div class="pagination-box" v-if="totalPages > 0">
+          <Pagination :defaultValue="searchParams.page" :total="totalPages" :onChange="handlePageChange" />
+        </div>
       </div>
     </div>
   </div>
@@ -28,7 +31,8 @@
 import _omit from 'lodash/omit'
 import _pickBy from 'lodash/pickBy'
 import searchBar from "@/components/hotel/searchBar"
-
+import hotelView from "@/components/hotel/hotelView"
+import Pagination from "@/components/hotel/Pagination"
 function parseQueryString(params) {
     let qs = ''
     for (let key in params) {
@@ -57,11 +61,10 @@ export default {
       hotels: {}
     }
   },
-  mounted() {
-    console.log(this.$route.query,this.searchParams)
-  },
   components: {
-    searchBar
+    searchBar,
+    hotelView,
+    Pagination
   },
   methods: {
     getCityData(name){
@@ -99,6 +102,14 @@ export default {
         this.locationList = res.data.data[0].location
       }
       this.loaded = true
+    },
+    handlePageChange(page) {
+      this.handleSearchSubmit({page})
+    },
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.hotels.total / 5)
     }
   }
 }
