@@ -33,7 +33,7 @@ export default {
 
   mounted() {
     this.bigImg = this.data.src[0];
-    console.log(this.bigImg);
+    // console.log(this.bigImg);
   },
 
   methods: {

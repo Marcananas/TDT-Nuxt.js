@@ -1,20 +1,11 @@
 <template>
-  <el-row>
-    <el-col :span="16">
-      <div id="container"></div>
-    </el-col>
-  </el-row>
+  <div id="container"></div>
 </template>
 
 <script>
 export default {
   data() {
-    return {
-      center: {
-        latitude: 0,
-        longitude: 0
-      }
-    };
+    return {};
   },
   props: {
     data: {
@@ -28,9 +19,8 @@ export default {
   computed: {},
 
   mounted() {
-    this.center = this.data;
+    console.log(this.data);
 
-    console.log(this.center, 123);
     window.onLoad = function() {
       var map = new AMap.Map("container", {
         resizeEnable: true,
@@ -58,11 +48,5 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.el-row {
-  height: 400px;
-  #container {
-    height: 400px;
-  }
-}
 </style>
 	

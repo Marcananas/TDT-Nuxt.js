@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/hotel' }">{{hotleData.big_cate}}</el-breadcrumb-item>
       <el-breadcrumb-item
@@ -7,6 +8,7 @@
       >{{hotleData.real_city}}{{hotleData.big_cate}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{hotleData.name}}</el-breadcrumb-item>
     </el-breadcrumb>
+    <!-- 酒店标题 -->
     <el-row>
       <h4>
         {{hotleData.name}}
@@ -26,8 +28,29 @@
     <Pictures :data="pics" class="pics" />
     <!-- 房间列表 -->
     <RoomTable :data="hotleData.products" />
-    <!-- 地图组件 -->
-    <HotelMap class="map" :data="hotleData.location" />
+    <!-- 地图部分 -->
+    <el-row class="map" :gutter="20">
+      <el-col :span="16">
+        <!-- 地图组件 -->
+        <HotelMap class="gaode" :data="pois" />
+      </el-col>
+      <el-col :span="8">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane
+            v-for="(item,index) in mapTab"
+            :key="index"
+            :label="item.name"
+            :name="item.value"
+          >
+            <ul>
+              <li v-for="(item,index) in pois" :key="index" style="margin-bottom: 20px">
+                <span>{{item.name}}</span>
+              </li>
+            </ul>
+          </el-tab-pane>
+        </el-tabs>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -42,7 +65,10 @@ export default {
         city: {},
         hotellevel: {},
         products: [],
-        location: {}
+        location: {
+          latitude: 0,
+          longitude: 0
+        }
       },
       pics: {
         name: "",
@@ -54,7 +80,17 @@ export default {
           "http://157.122.54.189:9093/images/hotel-pics/5.jpeg",
           "http://157.122.54.189:9093/images/hotel-pics/6.jpeg"
         ]
-      }
+      },
+      activeName: "scenic",
+      changeTab: {
+        scenic: "风景名胜",
+        traffic: "交通设施服务"
+      },
+      pois: [],
+      mapTab: [
+        { value: "scenic", name: "风景" },
+        { value: "traffic", name: "交通" }
+      ]
     };
   },
 
@@ -74,10 +110,36 @@ export default {
       this.hotleData = res.data.data[0];
       console.log(this.hotleData);
       this.pics.name = this.hotleData.name;
+      this.getPois();
     });
   },
 
-  methods: {}
+  methods: {
+    getPois() {
+      const types = this.changeTab[this.activeName];
+      this.$axios({
+        url: "https://restapi.amap.com/v3/place/text?parameters",
+        params: {
+          keywords: "",
+          city: this.hotleData.realcity,
+          location: `${this.hotleData.location.longitude},${this.hotleData.location.latitude}`,
+          types,
+          output: "json",
+          page: 1,
+          offset: 10,
+          key: "79041dfa1c752f49599e2b507c64da42"
+        }
+      }).then(res => {
+        this.pois = res.data.pois;
+        // console.log(this.pois);
+      });
+    },
+    handleClick(tab, event) {
+      // console.log(tab, event);
+      // console.log(this.activeName);
+      this.getPois();
+    }
+  }
 };
 </script>
 <style lang='less' scoped>
@@ -91,28 +153,25 @@ export default {
     color: #333;
     font-weight: 400;
     font-size: x-large;
-    // .iconfont {
-    //   font-family: "iconfont" !important;
-    //   font-size: 16px;
-    //   font-style: normal;
-    //   -webkit-font-smoothing: antialiased;
-    //   -moz-osx-font-smoothing: grayscale;
-    // }
     .iconhuangguan {
       color: #f90;
     }
   }
-  // .iconfont {
-  //   font-family: "iconfont" !important;
-  //   font-size: 16px;
-  //   font-style: normal;
-  //   -webkit-font-smoothing: antialiased;
-  // }
   .pics {
     margin: 50px auto;
   }
   .map {
     margin: 50px auto;
+    .gaode {
+      height: 400px;
+    }
+    .el-tab-pane {
+      overflow: auto;
+      height: 345px;
+      span {
+        font-size: 14px;
+      }
+    }
   }
 }
 </style>
