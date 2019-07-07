@@ -32,7 +32,8 @@
     <el-row class="map" :gutter="20">
       <el-col :span="16">
         <!-- 地图组件 -->
-        <HotelMap class="gaode" :data="pois" />
+        <HotelMap class="gaode" :data="center" />
+        <!-- <HotelMap class="gaode" /> -->
       </el-col>
       <el-col :span="8">
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -43,7 +44,12 @@
             :name="item.value"
           >
             <ul>
-              <li v-for="(item,index) in pois" :key="index" style="margin-bottom: 20px">
+              <li
+                v-for="(item,index) in pois"
+                :key="index"
+                style="margin-bottom: 20px"
+                @mouseover="movePoi(item.location)"
+              >
                 <span>{{item.name}}</span>
               </li>
             </ul>
@@ -58,6 +64,7 @@
 import Pictures from "@/components/hotel/pictures.vue";
 import RoomTable from "@/components/hotel/roomTable.vue";
 import HotelMap from "@/components/hotel/hotelMap.vue";
+// import HotelMap from "@/components/hotel/map.vue";
 export default {
   data() {
     return {
@@ -90,7 +97,8 @@ export default {
       mapTab: [
         { value: "scenic", name: "风景" },
         { value: "traffic", name: "交通" }
-      ]
+      ],
+      center: []
     };
   },
 
@@ -131,6 +139,7 @@ export default {
         }
       }).then(res => {
         this.pois = res.data.pois;
+        localStorage.setItem("lpp", JSON.stringify(this.pois));
         // console.log(this.pois);
       });
     },
@@ -138,6 +147,9 @@ export default {
       // console.log(tab, event);
       // console.log(this.activeName);
       this.getPois();
+    },
+    movePoi(center) {
+      this.center = center;
     }
   }
 };

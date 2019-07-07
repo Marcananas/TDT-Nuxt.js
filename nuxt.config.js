@@ -15,7 +15,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css'} // 新增全局字体样式
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' } // 新增全局字体样式
     ]
   },
 
@@ -39,7 +39,6 @@ export default {
     // '@/plugins/element-ui'
     { src: '@/plugins/element-ui', ssr: true },
     { src: '@/plugins/localStorage', ssr: false }
-    
   ],
 
   /*
@@ -71,4 +70,7 @@ export default {
     extend(config, ctx) {
     }
   },
+  // script: [
+  //   { src: "https://webapi.amap.com/maps?v=1.4.15&key=fba2b64d44d7a6a083c9da30e70135c2&callback=onLoad" },
+  // ]
 }
