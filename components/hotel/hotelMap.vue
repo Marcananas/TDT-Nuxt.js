@@ -19,8 +19,9 @@ export default {
   computed: {},
 
   mounted() {
-    console.log(this.data);
-
+    setTimeout(() => {
+      console.log(this.data);
+    }, 5000);
     window.onLoad = function() {
       var map = new AMap.Map("container", {
         resizeEnable: true,
