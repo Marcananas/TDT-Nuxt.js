@@ -60,8 +60,8 @@
           :to="`/post/detail?id=${data.id}`"
           v-for="(item, index) in data.images"
           :key="index"
-          v-if="index < 3"
-        >
+          v-if="index<3"
+          >
           <img :src="item" />
         </nuxt-link>
       </el-row>

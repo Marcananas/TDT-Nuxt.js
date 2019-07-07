@@ -155,7 +155,13 @@ export default {
         this.total = total;
       });
     },
-    Search() {}
+    Search(value) {
+      if(typeof value == "string"){
+        this.city = value
+      }
+      this.start = 0
+      this.getPost()  
+    }
   },
   mounted() {
     this.getPost();
