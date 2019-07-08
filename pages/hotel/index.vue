@@ -11,6 +11,16 @@
     <!-- 搜索栏 -->
     <searchBar :defaultValue="{cityName, ...searchParams }" :onChange="handleSearchSubmit" class="hotel-search-bar" />
 
+    <!-- 给枫哥插入地图组件 -->
+
+    <el-row :gutter='20'>
+      <el-col :span='0'>
+      </el-col>
+      <el-col :span='24'>
+        <HotelMap class="gaode" style='height: 300px'/>
+      </el-col>
+    </el-row>
+
     <!-- 搜索结果 -->
     <div class="hotel-list" v-if="loaded">
       <div class="no-result" v-if="hotels.total === 0">
@@ -33,6 +43,8 @@ import _pickBy from 'lodash/pickBy'
 import searchBar from "@/components/hotel/searchBar"
 import hotelView from "@/components/hotel/hotelView"
 import Pagination from "@/components/hotel/Pagination"
+import HotelMap from "@/components/hotel/hotelMap.vue";
+
 function parseQueryString(params) {
     let qs = ''
     for (let key in params) {
@@ -58,13 +70,15 @@ export default {
       loaded:false,
       cityData:null,
       searchParams:{...this.$route.query},
-      hotels: {}
+      hotels: {},
     }
   },
   components: {
     searchBar,
     hotelView,
-    Pagination
+    Pagination,
+    HotelMap
+
   },
   methods: {
     getCityData(name){
@@ -96,10 +110,17 @@ export default {
       const res = await this.$axios({
         url:`/hotels${qs}`
       })
+      
 
+      // 枫哥的给我留了个坐标。。。然后我惊奇的发现数据不同没法复用
       this.hotels = res.data
       if(res.data.total) {
-        this.locationList = res.data.data[0].location
+        this.locationList = res.data.data.map(v=>{
+          let name=v.name
+          return {...v.location,name}
+        })
+        console.log(this.locationList,'this.locationList');
+        localStorage.setItem("lpp", JSON.stringify(this.locationList));
       }
       this.loaded = true
     },

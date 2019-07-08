@@ -138,9 +138,16 @@ export default {
           key: "79041dfa1c752f49599e2b507c64da42"
         }
       }).then(res => {
-        this.pois = res.data.pois;
+        this.pois = res.data.pois.map(v=>{
+          let location={
+            longitude:+v.location.split(",")[0],
+              latitude:+v.location.split(",")[1]
+              }
+              let name=v.name
+          return {...location,name}
+        })
+        console.log(this.pois);
         localStorage.setItem("lpp", JSON.stringify(this.pois));
-        // console.log(this.pois);
       });
     },
     handleClick(tab, event) {
