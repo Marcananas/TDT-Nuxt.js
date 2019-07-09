@@ -23,7 +23,7 @@ export default {
 
   mounted() {
     let pois = JSON.parse(localStorage.getItem("lpp"));
-    let center = [pois[0].longitude,pois[0].latitude]
+    let center = [pois[0].longitude, pois[0].latitude];
     window.onLoad = function() {
       setTimeout(() => {}, 2000);
       var map = new AMap.Map("container", {
@@ -38,23 +38,17 @@ export default {
       // });
 
       let markerList = [];
-      // pois.forEach(item => {
-      //   item = item.location.split(",");
-      // });
       // console.log(pois, 999999);
 
       pois.forEach(item => {
         markerList.push(
           new AMap.Marker({
-            position: new AMap.LngLat(
-              item.longitude,
-              item.latitude
-            ),
+            position: new AMap.LngLat(item.longitude, item.latitude),
             title: item.name
           })
         );
       });
-      console.log(markerList, "实例");
+      // console.log(markerList, "实例");
       // 将创建的点标记添加到已有的地图实例：
       map.add(markerList);
     };

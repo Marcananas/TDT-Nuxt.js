@@ -57,6 +57,39 @@
         </el-tabs>
       </el-col>
     </el-row>
+
+    <el-row class="msg">
+      <el-col :span="4">基本信息</el-col>
+      <el-col :span="20">
+        <el-col :span="6">入住时间: 14:00之后</el-col>
+        <el-col :span="6">离店时间: 12:00之前</el-col>
+        <el-col :span="6">{{hotleData.creation_time}}/{{hotleData.renovat_time}}</el-col>
+        <el-col :span="6">酒店规模:{{hotleData.roomCount}}间客房</el-col>
+      </el-col>
+    </el-row>
+    <el-divider></el-divider>
+    <el-row>
+      <el-col :span="4">主要设施</el-col>
+      <el-col :span="20">
+        <el-tag
+          style="margin-left: 5px"
+          v-for="item in hotleData.hotelassets"
+          :key="item.id"
+          type="info"
+        >{{ item.name }}</el-tag>
+      </el-col>
+    </el-row>
+    <el-divider></el-divider>
+    <el-row>
+      <el-col :span="4">停车服务</el-col>
+      <el-col :span="20">-</el-col>
+    </el-row>
+    <el-divider></el-divider>
+    <el-row>
+      <el-col :span="4">品牌信息</el-col>
+      <el-col :span="20">-</el-col>
+    </el-row>
+    <el-divider></el-divider>
   </div>
 </template>
 
@@ -138,15 +171,15 @@ export default {
           key: "79041dfa1c752f49599e2b507c64da42"
         }
       }).then(res => {
-        this.pois = res.data.pois.map(v=>{
-          let location={
-            longitude:+v.location.split(",")[0],
-              latitude:+v.location.split(",")[1]
-              }
-              let name=v.name
-          return {...location,name}
-        })
-        console.log(this.pois);
+        this.pois = res.data.pois.map(v => {
+          let location = {
+            longitude: +v.location.split(",")[0],
+            latitude: +v.location.split(",")[1]
+          };
+          let name = v.name;
+          return { ...location, name };
+        });
+        // console.log(this.pois);
         localStorage.setItem("lpp", JSON.stringify(this.pois));
       });
     },
@@ -191,6 +224,9 @@ export default {
         font-size: 14px;
       }
     }
+  }
+  .msg {
+    font-size: 14px;
   }
 }
 </style>
